@@ -1,0 +1,46 @@
+{
+  "name": "dsh-theme-cluade",
+  "version": "0.4.1",
+  "private": true,
+  "description": "Cluade — a warm paper-and-terracotta theme layer for the DeepSeek Harness Web GUI, painting both the light and the dark palette through ctx.theme.overrideTokens",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "LICENSE",
+    "index.js",
+    "client.js",
+    "theme.css",
+    "markdown.css",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md"
+  ],
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "theme",
+    "cluade"
+  ],
+  "license": "MIT",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-theme"
+      ]
+    }
+  }
+}

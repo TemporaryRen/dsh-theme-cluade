@@ -1,0 +1,8 @@
+# Cluade —— DSH Web 客户端的暖色主题层
+#
+# 只挂载一个客户端插件：它在浏览器里通过 ctx.theme.overrideTokens 叠一层
+# token 覆盖，把内置的浅色与深色配色都换成暖纸色 + 陶土橙。设置里的
+# 浅色 / 深色 / 跟随系统 照常决定当前用哪一套色板，用户的偏好不被改写。
+- insert:
+    - id: theme-cluade
+      name: dsh-theme-cluade

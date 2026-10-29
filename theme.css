@@ -1,0 +1,96 @@
+/*
+ * Cluade — component patches that a token layer cannot express (inlined into
+ * client.js). Three groups:
+ *   1. the macOS sidebar material (darwin only);
+ *   2. selected-option fills (all platforms);
+ *   3. the expanded reasoning/"thinking" block (all platforms).
+ *
+ * Why this needs CSS at all: the desktop main window uses native macOS vibrancy
+ * (`vibrancy: 'sidebar'`, background `#00000000`) and the page is transparent on
+ * darwin, so the window material shows through. ui-layout then paints the left
+ * column with a cool blue-violet gradient over a partial sidebar fill:
+ *   light:  color-mix(… sidebar-fill 40%, transparent)  → ~39% warm, rest vibrancy
+ *   dark:   color-mix(… sidebar-fill 50%, transparent)
+ *   reduce: color-mix(… sidebar-fill 90%, transparent)   (prefers-reduced-transparency)
+ * A token override can only reach that partial layer; it cannot remove the
+ * gradient or the native material behind it, which is why the sidebar stayed
+ * gray/blue.
+ *
+ * This rule repaints exactly that column with an opaque
+ * `--dsw-specific-sidebar-fill` (light #F0ECE4 / dark #161311), replacing the
+ * native material there. It is:
+ *   - scoped to `data-platform=darwin`, so Web and Windows keep their shipped
+ *     styling (the injected rule simply never matches);
+ *   - matched on class-token boundaries of the CSS-module suffix `_sidebarCol`
+ *     (`[class$=…]` or `[class*=…' ']`), so a future `_sidebarCollapsed` or
+ *     `_sidebarColRight` class is not caught by accident;
+ *   - removed with the plugin effect, which restores the shipped
+ *     translucency/material immediately.
+ * If a future DSH build renames the class or drops data-platform, the rule
+ * stops matching and the sidebar falls back to the shipped gradient — a silent
+ * visual downgrade, never a rendering failure.
+ */
+html[data-platform='darwin'] [class$='_sidebarCol'],
+html[data-platform='darwin'] [class*='_sidebarCol '] {
+  background: var(--dsw-specific-sidebar-fill);
+}
+
+html[data-platform='darwin'] body[data-ds-dark-theme] [class$='_sidebarCol'],
+html[data-platform='darwin'] body[data-ds-dark-theme] [class*='_sidebarCol '] {
+  background: var(--dsw-specific-sidebar-fill);
+}
+
+/*
+ * 2) Selected options — ALL PLATFORMS (no darwin scope).
+ * DSH paints hover and selection in lists/menus with the same
+ * `--dsw-alias-interactive-bg-hover` token, so a selected row reads as a light
+ * gray wash. The reference uses a distinctly deeper warm fill for the selected
+ * item. These rules touch only the "selected" state, never plain hover.
+ * Coverage note: only menus rendered with the "fill" selection style get
+ * `_selectedFill`; "check" style menus keep their glyph only (by design).
+ *
+ * Class suffixes are CSS-module names: `_selectedFill` is the menu item fill
+ * (ui-primitives Menu), `_sessionRow`/`_searchResultRow` are the workspace
+ * rows (ui-workspace), `_panelRow` + `_panelActive` is the sidebar panel row
+ * (ui-sidebar), `_themeCube` + `_selected` is the Appearance cube (ui-theme).
+ */
+body [class*='_selectedFill'],
+body [class*='_selectedFill']:hover:not(:disabled),
+body [class*='_selectedFill']:focus-visible:not(:disabled) {
+  background: var(--cluade-selected-fill, var(--dsw-alias-bg-module-platform));
+}
+
+body [class*='_sessionRow'][class*='_selected'],
+body [class*='_searchResultRow'][class*='_selected'],
+body [class*='_panelRow'][class*='_panelActive'],
+body [class*='_themeCube'][class*='_selected'] {
+  background: var(--cluade-selected-fill, var(--dsw-alias-bg-module-platform));
+}
+
+body [class*='_themeCube'][class*='_selected'] {
+  border-color: color-mix(in srgb, var(--cluade-selected-fill) 70%, var(--dsw-alias-state-business-primary));
+}
+
+/*
+ * 3) Reasoning ("thinking") output — ALL PLATFORMS (no darwin scope).
+ * The shipped reasoning disclosure has no surface of its own: expanded
+ * chain-of-thought text sits directly on the conversation canvas. Give the
+ * expanded block the reference's section look: a visible warm border plus a
+ * slightly deeper warm fill. This is the only patch that adds geometry
+ * (padding/margin/border/radius); the token layer alone stays geometry-free.
+ * The disclosure header is sticky inside the block and ships with
+ * `background: bg-base`, so it must follow the same fill or it would show as a
+ * lighter band while scrolling.
+ */
+body [class*='_root'][data-variant='think'][data-expanded] {
+  box-sizing: border-box;
+  margin: 4px 0;
+  padding: 6px 10px;
+  background: var(--cluade-reasoning-fill, var(--dsw-alias-bg-layer-2));
+  border: 1px solid var(--cluade-reasoning-border, var(--dsw-alias-border-l3));
+  border-radius: var(--dsw-radius-md);
+}
+
+body [class*='_root'][data-variant='think'][data-expanded] [data-disclosure-header] {
+  background: var(--cluade-reasoning-fill, var(--dsw-alias-bg-layer-2));
+}

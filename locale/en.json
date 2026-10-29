@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Cluade",
+    "description": "Warm paper-and-terracotta theme for the Web GUI: repaints both the light and dark palettes through a token-override layer while leaving the built-in appearance switch untouched."
+  }
+}

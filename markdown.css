@@ -1,0 +1,254 @@
+/*
+ * Cluade — Markdown reading skin (inlined into client.js after theme.css).
+ *
+ * Ported from the Ember Markdown reference
+ * (/Users/temporary/source/workflow-skill/deepseek-harness-desktop/markdown-theme):
+ * warm body text, a clear heading ladder (H2 with a hairline), terracotta
+ * underlined links, warm inline-code chips, dark code blocks with a warm
+ * banner, warm quote slabs and a bordered table with a tinted header.
+ *
+ * Scope: DSH renders Markdown through one shared primitive in BOTH the chat
+ * transcript and the sidebar document preview; its root carries a CSS-module
+ * class ending in `_markdown` (the compact variant adds `_compact`, which is
+ * used by previews/tool surfaces and is intentionally left on DSH defaults).
+ *
+ * Colors come from `--cluade-md-*` / `--cluade-md-syn-*` custom properties
+ * registered by the token layer, so light/dark follow the theme mode and the
+ * palette stays the single color source. Reference-only extras that DSH's
+ * renderer cannot emit (callouts, .lead/.caption, kbd, mark, details,
+ * figcaption, footnotes, H7) are intentionally not simulated.
+ */
+
+/* ---------- base ---------- */
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) {
+  font-size: calc(var(--dsh-content-font-size, 14px) + 1px);
+  line-height: 1.95;
+  color: var(--cluade-md-text, var(--dsw-alias-label-primary));
+  overflow-wrap: anywhere;
+}
+
+/* ---------- headings ---------- */
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--cluade-md-heading, var(--dsw-alias-label-primary));
+  line-height: 1.45;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) h1 {
+  margin: 0 0 20px;
+  font-size: calc(32px + var(--dsh-content-font-delta, 0px));
+  font-weight: 650;
+  letter-spacing: -0.5px;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) h2 {
+  margin: 52px 0 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--cluade-md-border, var(--dsw-alias-border-l2));
+  font-size: calc(25px + var(--dsh-content-font-delta, 0px));
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) h3 {
+  margin: 34px 0 14px;
+  font-size: calc(21px + var(--dsh-content-font-delta, 0px));
+  font-weight: 600;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) h4 {
+  margin: 27px 0 12px;
+  font-size: calc(18px + var(--dsh-content-font-delta, 0px));
+  font-weight: 600;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) h5 {
+  margin: 25px 0 10px;
+  font-size: calc(16px + var(--dsh-content-font-delta, 0px));
+  font-weight: 650;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) h6 {
+  margin: 22px 0 8px;
+  font-size: calc(14px + var(--dsh-content-font-delta, 0px));
+  font-weight: 650;
+}
+
+/* ---------- text ---------- */
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) p {
+  margin: 0 0 18px;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) strong {
+  color: var(--cluade-md-strong, var(--dsw-alias-label-primary));
+  font-weight: 600;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) a,
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) [class*='_fileLink'] {
+  color: var(--cluade-md-link, var(--dsw-alias-link));
+  text-decoration: underline;
+  text-decoration-color: var(--cluade-md-link-border, var(--dsw-alias-border-l3));
+  text-underline-offset: 4px;
+  transition: color 0.15s;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) a:hover,
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) a:focus {
+  color: var(--cluade-md-link-hover, var(--dsw-alias-link));
+  text-decoration-color: currentColor;
+}
+
+/* ---------- lists ---------- */
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) :is(ul, ol) {
+  margin: 16px 0 22px;
+  padding-left: 24px;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) li {
+  margin: 7px 0;
+  padding-left: 5px;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) li::marker {
+  color: var(--cluade-md-marker, var(--dsw-alias-label-secondary));
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) li > :is(ul, ol) {
+  margin: 6px 0;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) input[type='checkbox'] {
+  width: 14px;
+  height: 14px;
+  margin: 0 8px 0 0;
+  accent-color: var(--cluade-md-marker, var(--dsw-alias-label-secondary));
+}
+
+/* ---------- rule ---------- */
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) hr {
+  height: 1px;
+  margin: 42px 0;
+  border: none;
+  background: var(--cluade-md-border, var(--dsw-alias-border-l2));
+}
+
+/* ---------- quotes ---------- */
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) blockquote {
+  margin: 24px 0;
+  padding: 16px 22px;
+  border-left: 3px solid var(--cluade-md-quote-border, var(--dsw-alias-border-l3));
+  border-radius: 0 6px 6px 0;
+  background: var(--cluade-md-quote-bg, var(--dsw-alias-bg-layer-2));
+  color: var(--cluade-md-quote-text, var(--dsw-alias-label-secondary));
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- inline code ---------- */
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) :not(pre) > code {
+  padding: 2px 6px;
+  border: 1px solid var(--cluade-md-inline-border, var(--dsw-alias-border-l2));
+  border-radius: 4px;
+  background: var(--cluade-md-inline-bg, var(--dsw-alias-markdown-inline-code));
+  color: var(--cluade-md-inline-text, var(--dsw-alias-label-primary));
+  font-family: var(--ds-font-family-code);
+  font-size: 0.875em;
+  line-height: 1.7;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) :is(h1, h2, h3, h4, h5, h6) code {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-family: var(--ds-font-family-code);
+}
+
+/* ---------- code blocks ---------- */
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) .md-code-block {
+  --dsl-code-block-border-radius: 8px;
+  --dsl-code-block-background: var(--cluade-md-code-bg);
+  --dsl-code-block-banner-background-color: var(--cluade-md-code-banner-bg);
+  --shiki-background: var(--cluade-md-code-bg);
+  --shiki-foreground: var(--cluade-md-code-text);
+  --shiki-token-keyword: var(--cluade-md-syn-keyword);
+  --shiki-token-string: var(--cluade-md-syn-string);
+  --shiki-token-string-expression: var(--cluade-md-syn-string-expr);
+  --shiki-token-comment: var(--cluade-md-syn-comment);
+  --shiki-token-parameter: var(--cluade-md-syn-parameter);
+  --shiki-token-function: var(--cluade-md-syn-function);
+  --shiki-token-constant: var(--cluade-md-syn-constant);
+  --shiki-token-punctuation: var(--cluade-md-syn-punctuation);
+  --shiki-token-link: var(--cluade-md-syn-link);
+  margin: 22px 0 24px;
+  border: 1px solid var(--cluade-md-code-border, var(--dsw-alias-border-l3));
+  border-radius: 8px;
+  background: var(--cluade-md-code-bg, var(--dsw-alias-markdown-code-block));
+  color: var(--cluade-md-code-text, var(--dsw-alias-label-primary));
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) .md-code-block [class*='_bannerWrap'] {
+  background-color: var(--cluade-md-code-banner-bg, var(--dsw-alias-markdown-code-block-banner));
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) .md-code-block [class*='_infostring'],
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) .md-code-block [class*='_copyButton'] {
+  color: var(--cluade-md-code-banner-text, var(--dsw-alias-label-secondary));
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) .md-code-block :where(pre) {
+  padding: 18px 22px 22px;
+  background: var(--cluade-md-code-bg, var(--dsw-alias-markdown-code-block));
+}
+/*
+ * Code text must be light on the dark block in BOTH palettes. Shiki-annotated
+ * spans carry inline colors, but plain/unhighlighted blocks (`_plain`) keep the
+ * shipped `color: label-primary`, which is a dark ink — on the dark block that
+ * is unreadable. Paint every pre/code node explicitly; shiki spans still win
+ * with their own inline token colors.
+ */
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) .md-code-block :is(pre, code) {
+  color: var(--cluade-md-code-text, var(--dsw-alias-label-primary));
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) .md-code-block [class*='_numbered'] code > .line::before {
+  color: color-mix(in srgb, var(--cluade-md-code-text, #e0cdb4) 55%, transparent);
+}
+
+/* ---------- tables ---------- */
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) [class*='_tableScroll']:not(.md-table-wide) {
+  border: 1px solid var(--cluade-md-table-border, var(--dsw-alias-border-l2));
+  border-radius: 7px;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) [class*='_tableScroll']:not(.md-table-wide) > table {
+  width: 100%;
+  max-width: 100%;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) [class*='_tableScroll'] th {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--cluade-md-table-border, var(--dsw-alias-border-l2));
+  background: var(--cluade-md-table-head-bg, var(--dsw-alias-bg-layer-2));
+  color: var(--cluade-md-table-head-text, var(--dsw-alias-label-secondary));
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) [class*='_tableScroll'] td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--cluade-md-table-cell-border, var(--dsw-alias-border-l1));
+  font-size: 13px;
+  line-height: 1.8;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) [class*='_tableScroll'] :is(th, td):first-child {
+  padding-left: 16px;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) [class*='_tableScroll'] td:last-child {
+  padding-right: 16px;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) [class*='_tableScroll'] tbody tr:nth-child(even) {
+  background: var(--cluade-md-table-zebra, var(--dsw-alias-bg-layer-1));
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) [class*='_tableScroll'] tbody tr:hover {
+  background: var(--cluade-md-table-hover, var(--dsw-alias-interactive-bg-hover));
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) [class*='_tableScroll'] tr:last-child td {
+  border-bottom: 0;
+}
+
+/* ---------- images and selection ---------- */
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+body [class*='_markdown']:not([class*='_compact']):not([class*='_1wejo']) ::selection {
+  background: var(--cluade-md-selection-bg, var(--dsw-alias-bg-document-selection));
+  color: var(--cluade-md-selection-text, var(--dsw-alias-label-primary));
+}
